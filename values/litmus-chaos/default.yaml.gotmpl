@@ -1,0 +1,59 @@
+###########################################################################
+## Litmus Part
+###########################################################################
+
+litmus:
+  customLabels:
+    bloc-pos: ""
+    composant: ""
+    ucd: ""
+
+  customAnnotations:
+    quartier-pos: ""
+    equipe: "
+    contact-en-cas-d-urgence: ""
+    projet-gitlab: ""
+
+  ingress:
+    enabled: true
+    name: litmus-ingress
+    annotations:
+      kubernetes.io/ingress.class: traefik
+      traefik.ingress.kubernetes.io/router.middlewares: {{ .Release.Namespace }}-{{ .Release.Name }}-force-https@kubernetescrd, {{ .Release.Namespace }}-{{ .Release.Name }}-rewrite-backend@kubernetescrd
+
+    host:
+      name: "litmus-portal.{{ .Environment.Name }}.k8s.my-domain.com"
+      paths:
+        frontend: /
+        backend: /backend
+  mongo:
+    persistence:
+      storageClass: "default"
+
+  portal:
+    server:
+      graphqlServer:
+        genericEnv:
+          SELF_AGENT: "false"
+
+  adminConfig:
+    ADMIN_USERNAME: {{ requiredEnv "LITMUS_ADMIN" | quote }}
+    ADMIN_PASSWORD: {{ requiredEnv "LITMUS_PASSWORD" | quote }}
+
+  upgradeAgent:
+    controlPlane:
+      image:
+	# Bug with 2.8.0 version
+        tag: "2.9.0"
+
+###########################################################################
+## Hook Part
+###########################################################################
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi

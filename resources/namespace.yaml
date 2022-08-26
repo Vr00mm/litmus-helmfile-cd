@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    equipe: ""
+    quartier-pos: ""
+    contact-en-cas-d-urgence: ""
+    projet-gitlab: ""
+  labels:
+    bloc-pos: ""
+    composant: ""
+    ucd: ""
+  name: litmus

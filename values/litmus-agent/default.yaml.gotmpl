@@ -1,0 +1,14 @@
+AGENT_NAME: "agent-{{ .Release.KubeContext }}"
+AGENT_DESCRIPTION: "My first agent deployed with helm !"
+LITMUS_URL: "https://litmus-portal.{{ .Environment.Name }}.k8s.my-domain.com"
+LITMUS_USERNAME: {{ requiredEnv "LITMUS_ADMIN" }}
+LITMUS_PASSWORD: {{ requiredEnv "LITMUS_PASSWORD" }}
+LITMUS_PROJECT_ID: {{ env "LITMUS_PROJECT_ID" | default ""}}
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi

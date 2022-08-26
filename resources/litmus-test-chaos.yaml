@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-chaos-alpine
+  labels:
+    app.kubernetes.io/name: tests-chaos-execution
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: tests-chaos-execution
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: tests-chaos-execution
+    spec:
+      containers:
+        - command:
+            - /bin/sleep
+            - "infinity"
+          image: alpine:3.16
+          imagePullPolicy: IfNotPresent
+          name: main
+          ports:
+            - containerPort: 80
+              name: http
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 200m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi

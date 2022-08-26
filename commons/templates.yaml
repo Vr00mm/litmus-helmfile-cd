@@ -1,0 +1,32 @@
+templates:
+  litmus-chaos: &litmus-chaos
+    chart: litmus-repo/litmus-chaos
+    version: "{{ requiredEnv \"LITMUS_VERSION\" }}"
+    namespace: litmus
+    missingFileHandler: Warn
+    hooks:
+    - events: ["presync"]
+      showlogs: true
+      command: "kubectl"
+      args: ["--context", "{{.Release.KubeContext}}", "apply", "-f", "../resources/namespace.yaml"]
+    values:
+    - ../values/litmus-chaos/default.yaml.gotmpl
+    - ../values/litmus-chaos/{{ .Environment.Name }}.yaml.gotmpl
+
+  litmus-agent: &litmus-agent
+    chart: litmus-repo/litmus-agent
+    version: "{{ requiredEnv \"LITMUS_AGENT_VERSION\" }}"
+    namespace: litmus
+    missingFileHandler: Warn
+    hooks:
+    - events: ["presync"]
+      showlogs: true
+      command: "kubectl"
+      args: ["--context", "{{.Release.KubeContext}}", "apply", "-f", "../resources/namespace.yaml"]
+    - events: ["postsync"]
+      showlogs: true
+      command: "kubectl"
+      args: ["--context", "{{.Release.KubeContext}}", "apply", "-n", "litmus", "-f", "../resources/litmus-test-chaos.yaml"]
+    values:
+    - ../values/litmus-agent/default.yaml.gotmpl
+    - ../values/litmus-agent/{{ .Environment.Name }}.yaml.gotmpl

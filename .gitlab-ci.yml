@@ -1,0 +1,69 @@
+variables:
+  GIT_SSL_NO_VERIFY: "true"
+
+stages:
+  - deploy-litmus
+
+deploy-sandbox:
+  variables:
+    LITMUS_VERSION: "v0.1.0-feature-2-8.305"
+    LITMUS_AGENT_VERSION: "v0.1.0-dev.43"
+    LITMUS_ADMIN: ${LITMUS_ADMIN_SANDBOX}
+    LITMUS_PASSWORD: ${LITMUS_PASSWORD_SANDBOX}
+    GITOPS_SSH_KEY: ${LITMUS_GITOPS_SSH_KEY_SANDBOX}
+    HUBS_SSH_KEY: ${LITMUS_HUBS_SSH_KEY_SANDBOX}
+  stage: deploy-litmus
+  image: ${DOCKER_REGISTRY}/chaos/helm-tool:0.6.0
+  tags:
+    - docker
+  script:
+    - export KUBECONFIG=${KUBE_CONFIG}
+    - helmfile -f environments/cluster-sandbox.yaml -e cluster-sandbox sync
+
+deploy-dev:
+  variables:
+    LITMUS_VERSION: "v0.1.0-feature-2-8.305"
+    LITMUS_AGENT_VERSION: "v0.1.0-dev.43"
+    LITMUS_ADMIN: ${LITMUS_ADMIN_DEV}
+    LITMUS_PASSWORD: ${LITMUS_PASSWORD_DEV}
+    GITOPS_SSH_KEY: ${LITMUS_GITOPS_SSH_KEY_DEV}
+    HUBS_SSH_KEY: ${LITMUS_HUBS_SSH_KEY_DEV}
+  stage: deploy-litmus
+  image: ${DOCKER_REGISTRY}/chaos/helm-tool:0.6.0
+  tags:
+    - docker
+  script:
+    - export KUBECONFIG=${KUBE_CONFIG}
+    - helmfile -f environments/cluster-dev.yaml -e cluster-dev sync
+
+deploy-preprod:
+  variables:
+    LITMUS_VERSION: "v0.1.0-feature-2-8.305"
+    LITMUS_AGENT_VERSION: "v0.1.0-dev.43"
+    LITMUS_ADMIN: ${LITMUS_ADMIN_PREPROD}
+    LITMUS_PASSWORD: ${LITMUS_PASSWORD_PREPROD}
+    GITOPS_SSH_KEY: ${LITMUS_GITOPS_SSH_KEY_PREPROD}
+    HUBS_SSH_KEY: ${LITMUS_HUBS_SSH_KEY_PREPROD}
+  stage: deploy-litmus
+  image: ${DOCKER_REGISTRY}/chaos/helm-tool:0.6.0
+  tags:
+    - docker
+  script:
+    - export KUBECONFIG=${KUBE_CONFIG}
+    - helmfile -f environments/cluster-preprod.yaml -e cluster-preprod sync
+
+deploy-prod:
+  variables:
+    LITMUS_VERSION: "v0.1.0-feature-2-8.305"
+    LITMUS_AGENT_VERSION: "v0.1.0-dev.43"
+    LITMUS_ADMIN: ${LITMUS_ADMIN_PROD}
+    LITMUS_PASSWORD: ${LITMUS_PASSWORD_PROD}
+    GITOPS_SSH_KEY: ${LITMUS_GITOPS_SSH_KEY_PROD}
+    HUBS_SSH_KEY: ${LITMUS_HUBS_SSH_KEY_PROD}
+  stage: deploy-litmus
+  image: ${DOCKER_REGISTRY}/chaos/helm-tool:0.6.0
+  tags:
+    - docker
+  script:
+    - export KUBECONFIG=${KUBE_CONFIG}
+    - helmfile -f environments/cluster-prod.yaml -e cluster-prod sync

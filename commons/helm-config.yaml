@@ -1,0 +1,7 @@
+helmDefaults:
+  wait: true
+  waitForJobs: true
+  timeout: 120
+  createNamespace: false
+  historyMax: 12
+  devel: true

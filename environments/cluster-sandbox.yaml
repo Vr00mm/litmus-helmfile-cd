@@ -1,0 +1,19 @@
+bases:
+- ../commons/helm-config.yaml
+- ../commons/repositories.yaml
+
+{{ readFile "../commons/templates.yaml" }}
+
+releases:
+- name: litmus-chaos
+  kubeContext: cluster-sandbox
+  <<: *litmus-chaos
+
+- name: litmus-agent
+  kubeContext: cluster-sandbox
+  needs:
+  - cluster-sandbox/litmus/litmus-chaos
+  <<: *litmus-agent
+
+environments:
+  cluster-sandbox:

@@ -1,0 +1,25 @@
+bases:
+- ../commons/helm-config.yaml
+- ../commons/repositories.yaml
+
+{{ readFile "../commons/templates.yaml" }}
+
+releases:
+- name: litmus-chaos
+  kubeContext: cluster-preprod-tools
+  <<: *litmus-chaos
+
+- name: litmus-agent-preprod01
+  kubeContext: cluster-preprod01
+  needs:
+  - cluster-preprod-tools/litmus/litmus-chaos
+  <<: *litmus-agent
+
+- name: litmus-agent-preprod02
+  kubeContext: cluster-preprod02
+  needs:
+  - cluster-preprod-tools/litmus/litmus-chaos
+  <<: *litmus-agent
+
+environments:
+  cluster-preprod:

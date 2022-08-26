@@ -1,0 +1,4 @@
+repositories:
+- name: litmus-repo
+  url: {{ requiredEnv "HELM_REGISTRY" }}
+  skipTLSVerify: true

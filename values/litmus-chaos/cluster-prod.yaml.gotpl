@@ -1,0 +1,46 @@
+LOG_LEVEL: "DEBUG"
+CONFIG_INIT_AS_CODE: |
+    {
+     "Projects": [
+      {
+       "Name": "Cluster Prod",
+       "Hubs": [
+        {
+         "NAME": "Kubernetes",
+         "URL": "git@REDACTED/chaos/produits/litmus/chaos-charts.git",
+         "BRANCH": "2.8",
+         "SSH_KEY": {{ requiredEnv "HUBS_SSH_KEY" | quote }}
+        },
+        {
+         "NAME": "Cloud-Foundry",
+         "URL": "git@REDACTED/chaos/produits/litmus/chaos-charts.git",
+         "BRANCH": "cloud-foundry",
+         "SSH_KEY": {{ requiredEnv "HUBS_SSH_KEY" | quote }}
+        },
+        {
+         "NAME": "COMPONENT_1",
+         "URL": "git@REDACTED/chaos/produits/litmus/chaos-charts.git",
+         "BRANCH": "component_1",
+         "SSH_KEY": {{ requiredEnv "HUBS_SSH_KEY" | quote }}
+        },
+        {
+         "NAME": "COMPONENT_2",
+         "URL": "git@REDACTED/chaos/produits/litmus/chaos-charts.git",
+         "BRANCH": "component_2",
+         "SSH_KEY": {{ requiredEnv "HUBS_SSH_KEY" | quote }}
+        },
+        {
+         "NAME": "COMPONENT_3",
+         "URL": "git@REDACTED/chaos/produits/litmus/chaos-charts.git",
+         "BRANCH": "COMPONENT_3",
+         "SSH_KEY": {{ requiredEnv "HUBS_SSH_KEY" | quote }}
+        }
+       ],
+       "GitOPS": {
+        "URL": "git@REDACTED/chaos/produits/litmus/litmus-gitops.git",
+        "BRANCH": "cluster-prod",
+        "SSH_KEY": {{ requiredEnv "GITOPS_SSH_KEY" | quote }}
+       }
+      }
+     ]
+    }
